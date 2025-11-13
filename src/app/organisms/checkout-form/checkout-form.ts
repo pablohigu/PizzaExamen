@@ -44,7 +44,7 @@ export class CheckoutFormComponent {
       // Activar Tarjeta
       tCtrl?.enable();
       tCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
-      
+      // Valida que sean 9 dígitos y requerido
       // Desactivar Bizum
       mCtrl?.disable();
       mCtrl?.clearValidators();
@@ -53,6 +53,7 @@ export class CheckoutFormComponent {
       // Activar Bizum
       mCtrl?.enable();
       mCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
+      // Valida que sean 9 dígitos 
       
       // Desactivar Tarjeta
       tCtrl?.disable();
@@ -87,6 +88,7 @@ export class CheckoutFormComponent {
     this.service.clearCart();
     this.form.reset({ metodo: 'tarjeta' });
     this.toggleInputs('tarjeta'); // Resetear lógica inputs
+    this.resetRequest.emit(); 
   }
 
   get isTarjeta() { return this.form.get('metodo')?.value === 'tarjeta'; }

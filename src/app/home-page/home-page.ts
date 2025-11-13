@@ -14,5 +14,9 @@ import { CheckoutFormComponent } from '../organisms/checkout-form/checkout-form'
   styleUrl: './home-page.scss'
 })
 export class HomePageComponent {
- 
+  constructor(@Inject(DOCUMENT) private document: Document) {}
+  handleReset() {
+    const element = this.document.getElementById('catalogo-pizzas');
+    
+  }
 }
