@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { PizzaService } from '../../services/pizza';
 
 @Component({
@@ -12,39 +12,51 @@ import { PizzaService } from '../../services/pizza';
 })
 export class CheckoutFormComponent {
   private fb = inject(FormBuilder);
-  public service = inject(PizzaService); 
-  resetRequest = output<void>(); 
+  public service = inject(PizzaService);
+  
+  resetRequest = output<void>();
+  showModal = false;
 
   form: FormGroup;
-  
-  // NUEVO: Control del Modal
-  showModal = false;
 
   constructor() {
     this.form = this.fb.group({
       hora: ['', [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]],
       direccion: ['', Validators.required],
-      metodo: ['tarjeta', Validators.required],
-      tarjeta: [''],
-      telefono: ['']
+      metodo: ['tarjeta', Validators.required], // Control maestro
+      tarjeta: [{value: '', disabled: false}],   // Estado inicial
+      telefono: [{value: '', disabled: true}]    // Estado inicial
     });
 
+    // Lógica Reactiva: Habilitar/Deshabilitar según selección
     this.form.get('metodo')?.valueChanges.subscribe(val => {
-      this.updateValidators(val);
+      this.toggleInputs(val);
     });
-    this.updateValidators('tarjeta');
+    
+    // Inicialización
+    this.toggleInputs('tarjeta');
   }
 
-  private updateValidators(metodo: string) {
+  private toggleInputs(metodo: string) {
     const tCtrl = this.form.get('tarjeta');
     const mCtrl = this.form.get('telefono');
 
     if (metodo === 'tarjeta') {
+      // Activar Tarjeta
+      tCtrl?.enable();
       tCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
+      
+      // Desactivar Bizum (pero sigue visible)
+      mCtrl?.disable();
       mCtrl?.clearValidators();
-      mCtrl?.setValue(''); 
+      mCtrl?.setValue(''); // Opcional: limpiar al cambiar
     } else {
+      // Activar Bizum
+      mCtrl?.enable();
       mCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
+      
+      // Desactivar Tarjeta
+      tCtrl?.disable();
       tCtrl?.clearValidators();
       tCtrl?.setValue('');
     }
@@ -52,34 +64,22 @@ export class CheckoutFormComponent {
     mCtrl?.updateValueAndValidity();
   }
 
-  // PASO 1: Validar y Abrir Modal
   pagar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     if (this.service.totalPrice() === 0) {
-      alert('¡Tu carrito está vacío! Añade alguna pizza.');
+      alert('Carrito vacío');
       return;
     }
-    
-    // Si todo está bien, mostramos el modal en lugar del alert
     this.showModal = true;
   }
 
-  // PASO 2: Confirmar definitivamente
-  confirmarPedido() {
-    this.showModal = false; // Cerrar modal
-    this.limpiar();         // Limpiar datos
-  }
-
-  limpiar() {
+  confirmar() {
+    this.showModal = false;
     this.service.clearCart();
     this.form.reset({ metodo: 'tarjeta' });
-    this.updateValidators('tarjeta');
-    this.resetRequest.emit(); 
+    this.resetRequest.emit();
   }
-
-  get isTarjeta() { return this.form.get('metodo')?.value === 'tarjeta'; }
-  get isBizum() { return this.form.get('metodo')?.value === 'bizum'; }
 }
