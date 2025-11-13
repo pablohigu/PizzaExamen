@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,25 +6,25 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.scss' // Asegúrate de que este archivo exista
+  styleUrl: './header.scss'
 })
 export class HeaderComponent {
-  // Textos
+
   titulo = input.required<string>();
   subtitle = input<string>('Sabor auténtico');
   
-  // Logos
-  pizzaLogoUrl = input<string>(); // Tu logo de pizza (ahora lo renombramos para claridad)
-  cuatroVientosLogoUrl = input<string>(); // NUEVO: Logo de Cuatrovientos
-  iconClass = input<string>('bi-circle-fill'); // Fallback si no hay pizzaLogoUrl
+  // Logos e Iconos
+  pizzaLogoUrl = input<string>(); 
+  cuatroVientosLogoUrl = input<string>(); 
+  iconClass = input<string>('bi-circle-fill'); 
 
-  // Horarios Configurables
+  // Horarios Configurables (Con valores por defecto)
   lunchOpenHour = input<number>(13);
   lunchCloseHour = input<number>(16);
   dinnerOpenHour = input<number>(20);
   dinnerCloseHour = input<number>(24);
 
-  // Estado de la tienda
+  // --- ESTADO (Reactivo) ---
   shopStatus = signal<{isOpen: boolean, message: string, color: string}>({
     isOpen: false,
     message: 'Calculando...',
@@ -32,7 +32,13 @@ export class HeaderComponent {
   });
 
   constructor() {
-    this.checkStatus();
+    // Esto "vigila" los inputs. Cuando Angular les asigna el valor real (ej: 12),
+    // el effect detecta que checkStatus() los usa y se vuelve a ejecutar automáticamente.
+    effect(() => {
+      this.checkStatus();
+    });
+
+    // Mantenemos el intervalo para actualizar si pasa el tiempo (cada minuto)
     setInterval(() => this.checkStatus(), 60000);
   }
 
@@ -40,25 +46,35 @@ export class HeaderComponent {
     const now = new Date();
     const hour = now.getHours();
 
-    const isLunch = hour >= this.lunchOpenHour() && hour < this.lunchCloseHour();
-    const isDinner = hour >= this.dinnerOpenHour() && hour < this.dinnerCloseHour();
+    // Obtenemos el valor actual de las señales
+    const lOpen = this.lunchOpenHour();
+    const lClose = this.lunchCloseHour();
+    const dOpen = this.dinnerOpenHour();
+    const dClose = this.dinnerCloseHour();
+
+    const isLunch = hour >= lOpen && hour < lClose;
+    const isDinner = hour >= dOpen && hour < dClose;
 
     if (isLunch || isDinner) {
-      const closeTime = isLunch ? `${this.lunchCloseHour()}:00` : '00:00';
+      // Calculamos hora de cierre para mostrar
+      const closeTime = isLunch ? `${lClose}:00` : (dClose === 24 ? '00:00' : `${dClose}:00`);
+      
       this.shopStatus.set({
         isOpen: true,
         message: `ABIERTO • Cierra a las ${closeTime}`,
         color: 'text-success border-success-subtle bg-success-subtle'
       });
     } else {
+      // Calculamos próxima apertura
       let nextOpen = '';
-      if (hour < this.lunchOpenHour()) {
-        nextOpen = `${this.lunchOpenHour()}:00`;
-      } else if (hour < this.dinnerOpenHour()) {
-        nextOpen = `${this.dinnerOpenHour()}:00`;
+      if (hour < lOpen) {
+        nextOpen = `${lOpen}:00`;
+      } else if (hour < dOpen) {
+        nextOpen = `${dOpen}:00`;
       } else {
-        nextOpen = `Mañana ${this.lunchOpenHour()}:00`;
+        nextOpen = `Mañana ${lOpen}:00`;
       }
+
       this.shopStatus.set({
         isOpen: false,
         message: `CERRADO • Abre a las ${nextOpen}`,

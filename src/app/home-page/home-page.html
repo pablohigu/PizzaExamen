@@ -2,10 +2,9 @@
   [titulo]="'4V PIZZA'" 
   [subtitle]="'Pizzería Artesanal'"
   [pizzaLogoUrl]="'assets/pizzaLOGO.png'"
-  [cuatroVientosLogoUrl]="'assets/cuatrovientosLOGO.png'"
-  [lunchOpenHour]="12"
-  [dinnerOpenHour]="19">
-</app-header>
+  [dinnerCloseHour]="24"
+  [cuatroVientosLogoUrl]="'assets/logocuatrovientos.png'"
+></app-header>
 <main class="container py-5 min-vh-100">
   
   <section class="mb-5">
@@ -24,7 +23,7 @@
       </div>
 
       <div>
-        <app-checkout-form (resetRequest)="handleReset()"></app-checkout-form>
+        <app-checkout-form ></app-checkout-form>
       </div>
 
     </div>

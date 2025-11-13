@@ -88,7 +88,10 @@ export class CheckoutFormComponent {
     this.service.clearCart();
     this.form.reset({ metodo: 'tarjeta' });
     this.toggleInputs('tarjeta'); // Resetear lógica inputs
-    this.resetRequest.emit(); 
+    const catalogo = document.getElementById('catalogo-pizzas');
+    if (catalogo) {
+      catalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   get isTarjeta() { return this.form.get('metodo')?.value === 'tarjeta'; }
