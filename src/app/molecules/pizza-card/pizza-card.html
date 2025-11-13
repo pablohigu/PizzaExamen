@@ -1,29 +1,27 @@
-<div class="card h-100 border-0 glass-panel hover-lift rounded-4 overflow-hidden">
+<div class="card h-100 border-0 glass-panel hover-lift rounded-4 overflow-hidden shadow-sm">
   
-  <div class="position-relative" style="height: 200px;">
-    <img [src]="pizza().imagen" class="w-100 h-100 object-fit-cover" [alt]="pizza().nombre">
-    <div class="position-absolute bottom-0 start-0 w-100 h-50 bg-gradient-to-t from-black to-transparent opacity-50"></div>
+  <div class="card-img-wrapper">
+    <img [src]="pizza().imagen" [alt]="pizza().nombre">
+    <div class="gradient-overlay"></div>
     
-    <span class="position-absolute top-0 end-0 m-2 badge badge-floating fs-6 px-3 py-2 shadow-sm">
-      {{ pizza().precio | currency:'EUR' }}
+    <span class="position-absolute bottom-0 end-0 m-3 badge bg-white text-dark rounded-pill shadow px-3 py-2 d-flex align-items-center gap-1">
+      <span class="fs-6 fw-bold">{{ pizza().precio | currency:'EUR' }}</span>
     </span>
   </div>
   
-  <div class="card-body d-flex flex-column p-3">
-    <h5 class="card-title fw-bold text-dark mb-2 text-truncate" [title]="pizza().nombre">
-      {{ pizza().nombre }}
-    </h5>
+  <div class="card-body d-flex flex-column p-4">
+    <div class="mb-3">
+      <h4 class="card-title fw-bold text-dark mb-1 ls-tight">{{ pizza().nombre }}</h4>
+      <div style="width: 40px; height: 3px; background-color: var(--bs-primary); border-radius: 2px;"></div>
+    </div>
     
-    <div class="mb-3 flex-grow-1">
-      <small class="text-uppercase text-muted fw-bold d-block mb-2" style="font-size: 0.7rem;">Ingredientes</small>
-      <div class="d-flex flex-wrap gap-1">
+    <div class="mb-4 flex-grow-1">
+      <div class="d-flex flex-wrap gap-2">
         @for (ing of pizza().ingredientes; track $index) {
-          <div class="d-flex align-items-center gap-1 px-2 py-1 rounded-3 bg-white border shadow-sm" 
-               [title]="getIcon(ing).label" style="max-width: 100%;">
-            <i [class]="'bi ' + getIcon(ing).icon + ' ' + getIcon(ing).color" style="font-size: 0.9rem;"></i>
-            <span class="small fw-medium text-secondary text-truncate" style="max-width: 80px;">
-              {{ getIcon(ing).label }}
-            </span>
+          <div class="ingredient-pill rounded-pill px-2 py-1 d-flex align-items-center gap-1 text-secondary user-select-none"
+               [title]="getIcon(ing).label">
+            <i [class]="'bi ' + getIcon(ing).icon + ' ' + getIcon(ing).color"></i>
+            <span class="fw-medium">{{ getIcon(ing).label }}</span>
           </div>
         }
       </div>
@@ -31,21 +29,20 @@
 
     <div class="mt-auto pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2">
       
-      <div class="d-flex align-items-center bg-white rounded-pill border shadow-sm" style="height: 36px;">
-        <button class="btn btn-link text-decoration-none text-dark px-2 py-0 h-100 d-flex align-items-center" (click)="dec()">
-          <i class="bi bi-dash"></i>
+      <div class="quantity-selector d-flex align-items-center rounded-pill px-1 py-1">
+        <button class="btn btn-link text-decoration-none p-0 px-2" (click)="dec()">
+          <i class="bi bi-dash-circle-fill fs-5"></i>
         </button>
-        <span class="fw-bold mx-1 text-center" style="min-width: 20px; font-size: 0.9rem;">{{ cantidad() }}</span>
-        <button class="btn btn-link text-decoration-none text-primary px-2 py-0 h-100 d-flex align-items-center" (click)="inc()">
-          <i class="bi bi-plus-lg"></i>
+        <span class="fw-bold mx-2 text-dark" style="min-width: 20px; text-align: center;">{{ cantidad() }}</span>
+        <button class="btn btn-link text-decoration-none p-0 px-2" (click)="inc()">
+          <i class="bi bi-plus-circle-fill fs-5"></i>
         </button>
       </div>
       
-      <button class="btn btn-primary rounded-pill px-3 py-1 fw-bold shadow-sm d-flex align-items-center gap-2 flex-grow-1 justify-content-center" 
-              style="height: 36px; white-space: nowrap;" 
+      <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 flex-grow-1 justify-content-center transition-btn" 
               (click)="submit()">
-        <span style="font-size: 0.9rem;">Añadir</span>
-        <i class="bi bi-bag-plus"></i>
+        <span>Añadir</span>
+        <i class="bi bi-bag-plus-fill"></i>
       </button>
     </div>
 

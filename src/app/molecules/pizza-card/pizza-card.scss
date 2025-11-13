@@ -1,30 +1,60 @@
-/* src/app/molecules/pizza-card/pizza-card.scss */
+// Efecto Zoom en la imagen
+.card-img-wrapper {
+  overflow: hidden; // Para que la imagen no se salga al hacer zoom
+  height: 220px;
+  position: relative;
 
-.bg-gradient-to-t {
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-  pointer-events: none; // Para que no interfiera con clicks si cubre algo
-}
-
-// Fix botones link
-.btn-link {
-  transition: color 0.2s, background-color 0.2s;
-  &:hover { 
-    color: var(--bs-primary) !important; 
-    background-color: rgba(var(--bs-primary-rgb), 0.05); // Efecto sutil al pasar ratón
+  img {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  &:active { transform: scale(0.90); }
 }
 
-// Asegurar que las etiquetas de ingredientes no rompan el layout
-.text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+// Al hacer hover sobre la tarjeta entera (.card), la imagen crece
+.card:hover .card-img-wrapper img {
+  transform: scale(1.1);
 }
 
-// Ajuste fino para el botón de añadir en pantallas muy pequeñas
-@media (max-width: 350px) {
-  .btn-primary span {
-    display: none; // Ocultar texto "Añadir" si la tarjeta es diminuta
+// Degradado para que el precio resalte mejor
+.gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+// Etiquetas de ingredientes (Pills)
+.ingredient-pill {
+  font-size: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #fff;
+    border-color: var(--bs-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+
+  i { font-size: 0.9rem; }
+}
+
+// Selector de cantidad personalizado
+.quantity-selector {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  
+  .btn-link {
+    color: var(--bs-secondary);
+    transition: color 0.2s;
+    
+    &:hover { color: var(--bs-primary); }
+    &:active { transform: scale(0.9); }
   }
 }
