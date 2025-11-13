@@ -1,12 +1,15 @@
 <div class="card h-100 border-0 shadow-sm rounded-4 hover-lift bg-white overflow-hidden">
   
-  <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-2">
+  <div class="d-flex justify-content-center align-items-center px-4 pt-4 pb-2 position-relative">
+    
     <h5 class="card-title fw-bold text-dark mb-0 text-uppercase ls-1" style="font-size: 1.1rem;">
       {{ pizza().nombre }}
     </h5>
-    <span class="badge bg-warning text-dark rounded-pill px-3 py-2 border border-warning-subtle shadow-sm fs-6">
+
+    <span class="position-absolute end-0 me-4 badge bg-warning text-dark rounded-pill px-3 py-2 border border-warning-subtle shadow-sm fs-6">
       {{ pizza().precio | currency:'EUR' }}
     </span>
+
   </div>
 
   <div class="card-img-container px-4 py-2 position-relative text-center">
