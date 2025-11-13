@@ -1,9 +1,30 @@
+/* src/app/molecules/pizza-card/pizza-card.scss */
+
 .bg-gradient-to-t {
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  pointer-events: none; // Para que no interfiera con clicks si cubre algo
 }
 
-// Fix para que los botones redondos se vean bien centrados
+// Fix botones link
 .btn-link {
-  &:hover { color: var(--bs-primary); }
-  &:active { transform: scale(0.95); }
+  transition: color 0.2s, background-color 0.2s;
+  &:hover { 
+    color: var(--bs-primary) !important; 
+    background-color: rgba(var(--bs-primary-rgb), 0.05); // Efecto sutil al pasar ratón
+  }
+  &:active { transform: scale(0.90); }
+}
+
+// Asegurar que las etiquetas de ingredientes no rompan el layout
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Ajuste fino para el botón de añadir en pantallas muy pequeñas
+@media (max-width: 350px) {
+  .btn-primary span {
+    display: none; // Ocultar texto "Añadir" si la tarjeta es diminuta
+  }
 }
