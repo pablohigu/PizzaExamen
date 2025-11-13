@@ -15,28 +15,20 @@ export class PizzaCardComponent {
   
   cantidad = signal(1);
 
-  // DICCIONARIO DE ICONOS (Formas y Colores Bootstrap)
-  ingredientConfig: {[key: string]: {icon: string, color: string}} = {
-    // Rojos
-    'tomate': { icon: 'bi-circle-fill', color: 'text-danger' },
-    'carne': { icon: 'bi-hexagon-fill', color: 'text-danger' },
-    'jamon': { icon: 'bi-square-fill', color: 'text-danger opacity-75' },
-    'bacon': { icon: 'bi-hdd-stack-fill', color: 'text-danger' },
-    
-    // Amarillos/Naranjas
-    'queso': { icon: 'bi-circle-fill', color: 'text-warning' },
-    'piña': { icon: 'bi-sun-fill', color: 'text-warning' },
-    'huevo': { icon: 'bi-egg-fill', color: 'text-warning' },
-    
-    // Verdes/Vegetales
-    'albahaca': { icon: 'bi-flower1', color: 'text-success' },
-    'pimiento': { icon: 'bi-triangle-fill', color: 'text-success' },
-    
-    // Neutros/Otros
-    'cebolla': { icon: 'bi-nut-fill', color: 'text-secondary' },
-    'setas': { icon: 'bi-umbrella-fill', color: 'text-secondary' },
-    'ajo': { icon: 'bi-gem', color: 'text-dark' },
-    'pescado': { icon: 'bi-water', color: 'text-info' }
+  // NUEVO: Diccionario de Imágenes (Usamos Icons8 para efecto inmediato)
+  // En un proyecto real, descargarías estas imágenes a 'assets/ingredients/'
+  ingredientImages: {[key: string]: string} = {
+    'tomate': 'https://img.icons8.com/color/48/tomato.png',
+    'queso': 'https://img.icons8.com/color/48/cheese.png',
+    'carne': 'https://img.icons8.com/color/48/steak-medium.png',
+    'bacon': 'https://img.icons8.com/color/48/bacon.png',
+    'piña': 'https://img.icons8.com/color/48/pineapple.png',
+    'huevo': 'https://img.icons8.com/color/48/egg.png',
+    'albahaca': 'https://img.icons8.com/color/48/basil.png',
+    'pimiento': 'https://img.icons8.com/color/48/paprika.png',
+    'cebolla': 'https://img.icons8.com/color/48/onion.png',
+    'setas': 'https://img.icons8.com/color/48/mushroom.png',
+    'ajo': 'https://img.icons8.com/color/48/garlic.png',
   };
 
   inc() { this.cantidad.update(v => v + 1); }
@@ -47,8 +39,8 @@ export class PizzaCardComponent {
     this.cantidad.set(1);
   }
 
-  // Helper para obtener la config, con fallback por si falta alguno
-  getConfig(ingrediente: string) {
-    return this.ingredientConfig[ingrediente] || { icon: 'bi-circle', color: 'text-muted' };
+  // Helper para obtener la imagen con un fallback por seguridad
+  getIngredientImage(ingrediente: string): string {
+    return this.ingredientImages[ingrediente] || 'https://img.icons8.com/color/48/ingredients.png';
   }
 }
