@@ -1,22 +1,24 @@
-import { Component, inject, output } from '@angular/core'; // <--- IMPORTANTE: 'output'
+import { Component, inject, output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common'; 
 import { PizzaService } from '../../services/pizza';
 
 @Component({
   selector: 'app-checkout-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './checkout-form.html',
   styleUrl: './checkout-form.scss'
 })
 export class CheckoutFormComponent {
   private fb = inject(FormBuilder);
-  private service = inject(PizzaService);
-  
-  // DEFINICIÓN DEL OUTPUT (El nombre 'resetRequest' es clave)
+  public service = inject(PizzaService); 
   resetRequest = output<void>(); 
 
   form: FormGroup;
+  
+  // NUEVO: Control del Modal
+  showModal = false;
 
   constructor() {
     this.form = this.fb.group({
@@ -28,37 +30,53 @@ export class CheckoutFormComponent {
     });
 
     this.form.get('metodo')?.valueChanges.subscribe(val => {
-      const tCtrl = this.form.get('tarjeta');
-      const mCtrl = this.form.get('telefono');
-
-      if (val === 'tarjeta') {
-        tCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
-        mCtrl?.clearValidators();
-        mCtrl?.setValue(''); 
-      } else {
-        mCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
-        tCtrl?.clearValidators();
-        tCtrl?.setValue('');
-      }
-      tCtrl?.updateValueAndValidity();
-      mCtrl?.updateValueAndValidity();
+      this.updateValidators(val);
     });
-    this.form.get('metodo')?.updateValueAndValidity();
+    this.updateValidators('tarjeta');
   }
 
-  pagar() {
-    if (this.form.valid && this.service.totalPrice() > 0) {
-      alert('¡Pago realizado con éxito! Gracias por tu compra.');
-      this.limpiar();
+  private updateValidators(metodo: string) {
+    const tCtrl = this.form.get('tarjeta');
+    const mCtrl = this.form.get('telefono');
+
+    if (metodo === 'tarjeta') {
+      tCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
+      mCtrl?.clearValidators();
+      mCtrl?.setValue(''); 
     } else {
-      this.form.markAllAsTouched();
+      mCtrl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
+      tCtrl?.clearValidators();
+      tCtrl?.setValue('');
     }
+    tCtrl?.updateValueAndValidity();
+    mCtrl?.updateValueAndValidity();
+  }
+
+  // PASO 1: Validar y Abrir Modal
+  pagar() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    if (this.service.totalPrice() === 0) {
+      alert('¡Tu carrito está vacío! Añade alguna pizza.');
+      return;
+    }
+    
+    // Si todo está bien, mostramos el modal en lugar del alert
+    this.showModal = true;
+  }
+
+  // PASO 2: Confirmar definitivamente
+  confirmarPedido() {
+    this.showModal = false; // Cerrar modal
+    this.limpiar();         // Limpiar datos
   }
 
   limpiar() {
     this.service.clearCart();
     this.form.reset({ metodo: 'tarjeta' });
-    // EMITIMOS EL EVENTO
+    this.updateValidators('tarjeta');
     this.resetRequest.emit(); 
   }
 

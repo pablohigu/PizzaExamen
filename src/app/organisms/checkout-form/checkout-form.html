@@ -1,45 +1,130 @@
 <div class="card border-0 shadow-lg rounded-4 p-4 bg-white">
+  <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+    <i class="bi bi-credit-card-2-front text-primary fs-3 me-3"></i>
+    <h4 class="fw-bold text-dark mb-0">Finalizar Pedido</h4>
+  </div>
+  
   <form [formGroup]="form" (ngSubmit)="pagar()">
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="hora" formControlName="hora" placeholder="20:30"
-             [class.is-invalid]="form.get('hora')?.touched && form.get('hora')?.invalid">
-      <label for="hora">Hora de Entrega (HH:MM)</label>
+    
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="hora" formControlName="hora" placeholder="20:30"
+                 [class.is-invalid]="form.get('hora')?.invalid && form.get('hora')?.touched">
+          <label for="hora">Hora (HH:MM)</label>
+          
+          @if (form.get('hora')?.invalid && form.get('hora')?.touched) {
+            <div class="invalid-feedback">
+              @if (form.get('hora')?.hasError('required')) { <span>Requerido</span> }
+              @if (form.get('hora')?.hasError('pattern')) { <span>Formato inválido</span> }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="dir" formControlName="direccion" placeholder="Dirección"
+                 [class.is-invalid]="form.get('direccion')?.invalid && form.get('direccion')?.touched">
+          <label for="dir">Dirección de entrega</label>
+          
+          @if (form.get('direccion')?.hasError('required') && form.get('direccion')?.touched) {
+            <div class="invalid-feedback">La dirección es obligatoria</div>
+          }
+        </div>
+      </div>
     </div>
 
-    <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="dir" formControlName="direccion" placeholder="Calle..."
-             [class.is-invalid]="form.get('direccion')?.touched && form.get('direccion')?.invalid">
-      <label for="dir">Dirección Completa</label>
+    <div class="mb-3">
+      <label class="form-label fw-bold text-secondary small text-uppercase ls-1">Método de Pago</label>
+      <div class="d-flex gap-3">
+        <div class="flex-grow-1">
+          <input type="radio" class="btn-check" name="metodo" id="rt" value="tarjeta" formControlName="metodo">
+          <label class="btn btn-outline-light text-dark border w-100 p-3 rounded-3 shadow-sm payment-card position-relative" for="rt">
+            <i class="bi bi-credit-card text-primary mb-1 d-block fs-4"></i>
+            <span class="fw-bold">Tarjeta</span>
+            <i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-2 check-icon" *ngIf="isTarjeta"></i>
+          </label>
+        </div>
+
+        <div class="flex-grow-1">
+          <input type="radio" class="btn-check" name="metodo" id="rb" value="bizum" formControlName="metodo">
+          <label class="btn btn-outline-light text-dark border w-100 p-3 rounded-3 shadow-sm payment-card position-relative" for="rb">
+            <i class="bi bi-phone text-primary mb-1 d-block fs-4"></i>
+            <span class="fw-bold">Bizum</span>
+            <i class="bi bi-check-circle-fill text-success position-absolute top-0 end-0 m-2 check-icon" *ngIf="isBizum"></i>
+          </label>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-3 d-flex gap-3">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" value="tarjeta" formControlName="metodo" id="rt">
-        <label class="form-check-label" for="rt">Tarjeta</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" value="bizum" formControlName="metodo" id="rb">
-        <label class="form-check-label" for="rb">Bizum</label>
-      </div>
+    <div class="mb-4" style="min-height: 80px;">
+      @if (isTarjeta) {
+        <div class="form-floating animate-fade-in">
+          <input type="text" class="form-control" formControlName="tarjeta" placeholder="16 dígitos" maxlength="16"
+                 [class.is-invalid]="form.get('tarjeta')?.invalid && form.get('tarjeta')?.touched">
+          <label>Nº Tarjeta (16 dígitos)</label>
+          <div class="invalid-feedback">Introduce los 16 dígitos de tu tarjeta.</div>
+        </div>
+      }
+
+      @if (isBizum) {
+        <div class="form-floating animate-fade-in">
+          <input type="text" class="form-control" formControlName="telefono" placeholder="9 dígitos" maxlength="9"
+                 [class.is-invalid]="form.get('telefono')?.invalid && form.get('telefono')?.touched">
+          <label>Teléfono Móvil (9 dígitos)</label>
+          <div class="invalid-feedback">Introduce un móvil válido (9 dígitos).</div>
+        </div>
+      }
     </div>
 
-    @if (isTarjeta) {
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" formControlName="tarjeta" placeholder="16 dígitos"
-               [class.is-invalid]="form.get('tarjeta')?.touched && form.get('tarjeta')?.invalid">
-        <label>Nº Tarjeta (16 dígitos)</label>
-      </div>
-    } @else {
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" formControlName="telefono" placeholder="9 dígitos"
-               [class.is-invalid]="form.get('telefono')?.touched && form.get('telefono')?.invalid">
-        <label>Nº Móvil (9 dígitos)</label>
+    @if (service.totalPrice() === 0) {
+      <div class="alert alert-warning d-flex align-items-center p-2 mb-3 rounded-3" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <small class="fw-bold">El carrito está vacío. Añade pizzas para pedir.</small>
       </div>
     }
 
-    <div class="d-flex gap-2 mt-4">
-      <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill py-2 fw-bold">PAGAR</button>
-      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="limpiar()">LIMPIAR</button>
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-sm hover-lift"
+              [disabled]="form.invalid || service.totalPrice() === 0">
+        <i class="bi bi-bag-check-fill me-2"></i> CONFIRMAR PEDIDO
+      </button>
+      <button type="button" class="btn btn-link text-secondary text-decoration-none btn-sm" (click)="limpiar()">
+        Borrar datos y empezar de nuevo
+      </button>
     </div>
+
   </form>
 </div>
+@if (showModal) {
+  <div class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center" 
+       style="z-index: 1050; backdrop-filter: blur(5px);">
+    
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden animate-pop-in" style="max-width: 400px; width: 90%;">
+      
+      <div class="card-header bg-success text-white text-center py-4 border-0">
+        <div class="mb-2">
+          <i class="bi bi-check-circle-fill display-1"></i>
+        </div>
+        <h4 class="fw-bold mb-0">¡Pedido Listo!</h4>
+      </div>
+
+      <div class="card-body p-4 text-center">
+        <p class="text-secondary mb-1">Tu pedido por valor de</p>
+        <h2 class="text-primary fw-bold mb-3">{{ service.totalPrice() | currency:'EUR' }}</h2>
+        <p class="text-muted small">
+          Se enviará a <strong>{{ form.get('direccion')?.value }}</strong><br>
+          Hora estimada: <strong>{{ form.get('hora')?.value }}</strong>
+        </p>
+      </div>
+
+      <div class="card-footer bg-white border-0 p-3">
+        <button class="btn btn-success w-100 rounded-pill fw-bold py-3 shadow-sm hover-scale" 
+                (click)="confirmarPedido()">
+          ENTENDIDO, ¡GRACIAS!
+        </button>
+      </div>
+    </div>
+  </div>
+}
