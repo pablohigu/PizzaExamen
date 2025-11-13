@@ -15,8 +15,8 @@ export class PizzaCardComponent {
   
   cantidad = signal(1);
 
-  // NUEVO: Diccionario de Imágenes (Usamos Icons8 para efecto inmediato)
-  // En un proyecto real, descargarías estas imágenes a 'assets/ingredients/'
+  readonly DEFAULT_IMG = 'https://img.icons8.com/color/48/ingredients.png';
+
   ingredientImages: {[key: string]: string} = {
     'tomate': 'https://img.icons8.com/color/48/tomato.png',
     'queso': 'https://img.icons8.com/color/48/cheese.png',
@@ -28,7 +28,7 @@ export class PizzaCardComponent {
     'pimiento': 'https://img.icons8.com/color/48/paprika.png',
     'cebolla': 'https://img.icons8.com/color/48/onion.png',
     'setas': 'https://img.icons8.com/color/48/mushroom.png',
-    'ajo': 'https://img.icons8.com/color/48/garlic.png',
+    'ajo': 'https://img.icons8.com/color/48/garlic.png'
   };
 
   inc() { this.cantidad.update(v => v + 1); }
@@ -38,9 +38,11 @@ export class PizzaCardComponent {
     this.add.emit({ pizza: this.pizza(), cantidad: this.cantidad() });
     this.cantidad.set(1);
   }
-
-  // Helper para obtener la imagen con un fallback por seguridad
   getIngredientImage(ingrediente: string): string {
-    return this.ingredientImages[ingrediente] || 'https://img.icons8.com/color/48/ingredients.png';
+    return this.ingredientImages[ingrediente] || this.DEFAULT_IMG;
+  }
+
+  handleImageError(event: any) {
+    event.target.src = this.DEFAULT_IMG;
   }
 }
