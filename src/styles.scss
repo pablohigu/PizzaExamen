@@ -1,27 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
-$primary: #ff4500; // Naranja/Rojo Pizza intenso
-$dark: #212529;
+/* src/styles.scss */
+
+// 1. Configuración de Variables (ANTES de importar Bootstrap)
+$primary: #ff4500;       // Naranja Quemado (Color Pizza)
+$secondary: #2d3436;     // Gris oscuro elegante
+$success: #00b894;       // Verde moderno
+$warning: #fdcb6e;       // Amarillo queso
+$danger: #d63031;        // Rojo tomate
 $light: #f8f9fa;
-$bg-color: #fffcf9; // Crema suave
+$dark: #2d3436;
 
-@import "../node_modules/bootstrap/dist/css/bootstrap.css";
-@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
-// npm install bootstrap
-// npm install bootrap-icons
-body { background-color: $bg-color; }
+$font-family-sans-serif: 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+$border-radius: 1rem;    // Bordes más redondeados globalmente
+$box-shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+$box-shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
 
-// Efecto de elevación al pasar el ratón
+// 2. Importar Bootstrap SCSS (¡Importante! Apunta a la carpeta scss)
+@import "bootstrap/scss/bootstrap";
+
+// 3. Importar Iconos
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+// 4. Estilos Globales y Efectos "Wow"
+body {
+  background-color: #fff8f0;
+  background-image: radial-gradient(#ff4500 0.5px, transparent 0.5px), radial-gradient(#ff4500 0.5px, #fff8f0 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  background-attachment: fixed; /* Efecto parallax suave */
+  opacity: 0.95; // Suaviza el patrón
+}
+
+// Panel de Cristal (Glassmorphism)
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+}
+
+// Animación Hover para las tarjetas
 .hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  &:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(255, 69, 0, 0.15) !important; // Sombra naranja suave
+    border-color: rgba($primary, 0.3) !important;
   }
 }
 
-// Efecto cristal para contenedores
-.glass-panel {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0,0,0,0.05);
+// Badges flotantes más bonitos
+.badge-floating {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: $dark;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }

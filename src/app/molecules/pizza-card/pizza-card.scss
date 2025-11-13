@@ -1,0 +1,9 @@
+.bg-gradient-to-t {
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+}
+
+// Fix para que los botones redondos se vean bien centrados
+.btn-link {
+  &:hover { color: var(--bs-primary); }
+  &:active { transform: scale(0.95); }
+}
