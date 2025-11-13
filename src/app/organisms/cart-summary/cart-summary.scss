@@ -1,0 +1,22 @@
+// Efecto suave al pasar el ratón por encima de un item del pedido
+.hover-bg-light {
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+// Borde punteado para simular papel de ticket
+.border-dashed {
+  border-style: dashed !important;
+}
+
+// Espaciado de letras para títulos elegantes
+.ls-1 {
+  letter-spacing: 1px;
+}
+
+// Transición base
+.transition-base {
+  transition: all 0.2s ease-in-out;
+}

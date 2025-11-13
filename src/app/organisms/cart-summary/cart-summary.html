@@ -1,23 +1,54 @@
-<div class="card border-0 shadow-sm rounded-4 mb-4">
-  <div class="card-header bg-white border-0 pt-4 px-4">
-    <h4 class="fw-bold text-secondary">Resumen del Pedido</h4>
+<div class="card border-0 shadow-glass rounded-4 mb-4 overflow-hidden bg-white">
+  <div class="card-header bg-primary text-white py-3 px-4 border-0">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-receipt-cutoff fs-4"></i>
+      <h5 class="mb-0 fw-bold text-uppercase ls-1">Tu Pedido</h5>
+    </div>
   </div>
-  <div class="card-body px-4">
+
+  <div class="card-body p-4">
     @if (service.cart().length) {
-      <ul class="list-unstyled">
+      <div class="d-flex flex-column gap-3 mb-4">
         @for (item of service.cart(); track item.pizza.id) {
-          <li class="d-flex justify-content-between mb-2 py-2 border-bottom border-light">
-            <span><span class="text-primary fw-bold">{{ item.cantidad }}x</span> {{ item.pizza.nombre }}</span>
-            <span class="fw-bold">{{ item.subtotal | currency:'EUR' }}</span>
-          </li>
+          <div class="d-flex justify-content-between align-items-center p-2 rounded-3 hover-bg-light transition-base">
+            <div class="d-flex align-items-center gap-3">
+              <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-bold shadow-sm">
+                {{ item.cantidad }}
+              </span>
+              <div class="d-flex flex-column">
+                <span class="fw-bold text-dark">{{ item.pizza.nombre }}</span>
+                <small class="text-muted" style="font-size: 0.75rem;">Pizza Artesanal</small>
+              </div>
+            </div>
+            
+            <span class="fw-bold text-secondary">{{ item.subtotal | currency:'EUR' }}</span>
+          </div>
         }
-      </ul>
-      <div class="d-flex justify-content-between mt-3 pt-2 border-top">
-        <span class="fs-5">Total</span>
-        <span class="fs-4 fw-bold text-primary">{{ service.totalPrice() | currency:'EUR' }}</span>
       </div>
+      
+      <div class="border-top border-2 border-secondary border-opacity-10 border-dashed my-3"></div>
+      
+      <div class="d-flex justify-content-between align-items-end mt-3">
+        <span class="text-secondary text-uppercase fw-bold small ls-1">Total a pagar</span>
+        <span class="display-6 fw-bold text-primary lh-1">{{ service.totalPrice() | currency:'EUR' }}</span>
+      </div>
+
     } @else {
-      <p class="text-muted text-center py-3">El carrito está vacío 😢</p>
+      <div class="text-center py-5 opacity-50">
+        <div class="mb-3">
+          <i class="bi bi-basket2 display-1 text-secondary"></i>
+        </div>
+        <h6 class="fw-bold text-secondary text-uppercase ls-1">Tu cesta está vacía</h6>
+        <p class="small text-muted mb-0">Selecciona algunas pizzas del menú para comenzar</p>
+      </div>
     }
   </div>
+  
+  @if (service.cart().length) {
+    <div class="card-footer bg-light border-0 py-2 text-center">
+      <small class="text-muted fst-italic" style="font-size: 0.7rem;">
+        <i class="bi bi-shield-check me-1"></i>Pago 100% Seguro
+      </small>
+    </div>
+  }
 </div>
