@@ -1,0 +1,23 @@
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+  <div class="card-header bg-white border-0 pt-4 px-4">
+    <h4 class="fw-bold text-secondary">Resumen del Pedido</h4>
+  </div>
+  <div class="card-body px-4">
+    @if (service.cart().length) {
+      <ul class="list-unstyled">
+        @for (item of service.cart(); track item.pizza.id) {
+          <li class="d-flex justify-content-between mb-2 py-2 border-bottom border-light">
+            <span><span class="text-primary fw-bold">{{ item.cantidad }}x</span> {{ item.pizza.nombre }}</span>
+            <span class="fw-bold">{{ item.subtotal | currency:'EUR' }}</span>
+          </li>
+        }
+      </ul>
+      <div class="d-flex justify-content-between mt-3 pt-2 border-top">
+        <span class="fs-5">Total</span>
+        <span class="fs-4 fw-bold text-primary">{{ service.totalPrice() | currency:'EUR' }}</span>
+      </div>
+    } @else {
+      <p class="text-muted text-center py-3">El carrito está vacío 😢</p>
+    }
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="row g-4" id="pizza-list-anchor">
+  @for (p of service.pizzas(); track p.id) {
+    <div class="col-12 col-md-6 col-lg-4">
+      <app-pizza-card [pizza]="p" (add)="service.addToCart($event.pizza, $event.cantidad)"></app-pizza-card>
+    </div>
+  }
+</div>

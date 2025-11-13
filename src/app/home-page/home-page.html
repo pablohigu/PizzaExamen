@@ -1,0 +1,24 @@
+<app-header [titulo]="'4V PIZZA EXAMEN'"></app-header>
+
+<main class="container py-5 min-vh-100">
+  <div class="row g-5">
+    
+    <div class="col-lg-7">
+      <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+        <h2 class="fw-light m-0 text-primary">Nuestras Pizzas</h2>
+        <span class="badge bg-light text-dark ms-3 border">Hechas a mano</span>
+      </div>
+      <app-pizza-list></app-pizza-list>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="sticky-top" style="top: 2rem; z-index: 10;">
+        <app-cart-summary></app-cart-summary>
+        <app-checkout-form (resetRequest)="handleReset()"></app-checkout-form>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<app-footer [author]="'Tu Nombre Apellido'"></app-footer>

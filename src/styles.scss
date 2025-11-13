@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+$primary: #ff4500; // Naranja/Rojo Pizza intenso
+$dark: #212529;
+$light: #f8f9fa;
+$bg-color: #fffcf9; // Crema suave
+
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+// npm install bootstrap
+// npm install bootrap-icons
+body { background-color: $bg-color; }
+
+// Efecto de elevación al pasar el ratón
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+}
+
+// Efecto cristal para contenedores
+.glass-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,0,0,0.05);
+}

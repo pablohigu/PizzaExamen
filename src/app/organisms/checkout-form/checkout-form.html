@@ -1,0 +1,45 @@
+<div class="card border-0 shadow-lg rounded-4 p-4 bg-white">
+  <form [formGroup]="form" (ngSubmit)="pagar()">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="hora" formControlName="hora" placeholder="20:30"
+             [class.is-invalid]="form.get('hora')?.touched && form.get('hora')?.invalid">
+      <label for="hora">Hora de Entrega (HH:MM)</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="dir" formControlName="direccion" placeholder="Calle..."
+             [class.is-invalid]="form.get('direccion')?.touched && form.get('direccion')?.invalid">
+      <label for="dir">Dirección Completa</label>
+    </div>
+
+    <div class="mb-3 d-flex gap-3">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" value="tarjeta" formControlName="metodo" id="rt">
+        <label class="form-check-label" for="rt">Tarjeta</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" value="bizum" formControlName="metodo" id="rb">
+        <label class="form-check-label" for="rb">Bizum</label>
+      </div>
+    </div>
+
+    @if (isTarjeta) {
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" formControlName="tarjeta" placeholder="16 dígitos"
+               [class.is-invalid]="form.get('tarjeta')?.touched && form.get('tarjeta')?.invalid">
+        <label>Nº Tarjeta (16 dígitos)</label>
+      </div>
+    } @else {
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" formControlName="telefono" placeholder="9 dígitos"
+               [class.is-invalid]="form.get('telefono')?.touched && form.get('telefono')?.invalid">
+        <label>Nº Móvil (9 dígitos)</label>
+      </div>
+    }
+
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill py-2 fw-bold">PAGAR</button>
+      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="limpiar()">LIMPIAR</button>
+    </div>
+  </form>
+</div>
