@@ -1,0 +1,9 @@
+
+.hover-light {
+  transition: color 0.2s ease;
+  &:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+  }
+}
+

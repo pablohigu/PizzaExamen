@@ -1,15 +1,21 @@
 import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss'
 })
 export class FooterComponent {
-  author = input.required<string>(); 
-  course = input<string>('2º DAM'); // Nuevo input opcional
-  email = input<string>('contacto@4vpizza.com'); // Nuevo input opcional
+  // Configuración obligatoria según examen
+  author = input.required<string>();
   
-  year = new Date().getFullYear();
+  // Configuraciones opcionales para dar contexto
+  course = input<string>('2º DAM - Desarrollo de Interfaces');
+  email = input<string>('info@4vpizza.com');
+  
+  // Cálculo automático del año (Requisito Examen)
+  currentYear = new Date().getFullYear();
 }

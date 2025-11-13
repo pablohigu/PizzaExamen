@@ -6,22 +6,23 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.scss'
+  styleUrl: './header.scss' // Asegúrate de que este archivo exista
 })
 export class HeaderComponent {
   // Textos
   titulo = input.required<string>();
   subtitle = input<string>('Sabor auténtico');
   
-  // Imagen (Nueva funcionalidad)
-  logoUrl = input<string>(); // Opcional. Si viene, se usa imagen. Si no, icono.
-  iconClass = input<string>('bi-circle-fill'); 
+  // Logos
+  pizzaLogoUrl = input<string>(); // Tu logo de pizza (ahora lo renombramos para claridad)
+  cuatroVientosLogoUrl = input<string>(); // NUEVO: Logo de Cuatrovientos
+  iconClass = input<string>('bi-circle-fill'); // Fallback si no hay pizzaLogoUrl
 
-  // Horarios Configurables 
-  lunchOpenHour = input<number>(13);  // 13:00
-  lunchCloseHour = input<number>(16); // 16:00
-  dinnerOpenHour = input<number>(20); // 20:00
-  dinnerCloseHour = input<number>(24); // 24:00 / 00:00
+  // Horarios Configurables
+  lunchOpenHour = input<number>(13);
+  lunchCloseHour = input<number>(16);
+  dinnerOpenHour = input<number>(20);
+  dinnerCloseHour = input<number>(24);
 
   // Estado de la tienda
   shopStatus = signal<{isOpen: boolean, message: string, color: string}>({
@@ -39,22 +40,17 @@ export class HeaderComponent {
     const now = new Date();
     const hour = now.getHours();
 
-    // Usamos los inputs() para la lógica
     const isLunch = hour >= this.lunchOpenHour() && hour < this.lunchCloseHour();
     const isDinner = hour >= this.dinnerOpenHour() && hour < this.dinnerCloseHour();
 
     if (isLunch || isDinner) {
-      // ABIERTO
-      // Calculamos la hora de cierre dinámica
       const closeTime = isLunch ? `${this.lunchCloseHour()}:00` : '00:00';
-      
       this.shopStatus.set({
         isOpen: true,
         message: `ABIERTO • Cierra a las ${closeTime}`,
         color: 'text-success border-success-subtle bg-success-subtle'
       });
     } else {
-      // CERRADO - Calcular próxima apertura dinámica
       let nextOpen = '';
       if (hour < this.lunchOpenHour()) {
         nextOpen = `${this.lunchOpenHour()}:00`;
@@ -63,7 +59,6 @@ export class HeaderComponent {
       } else {
         nextOpen = `Mañana ${this.lunchOpenHour()}:00`;
       }
-
       this.shopStatus.set({
         isOpen: false,
         message: `CERRADO • Abre a las ${nextOpen}`,
