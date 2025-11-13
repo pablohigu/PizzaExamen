@@ -1,50 +1,49 @@
-<div class="card h-100 border-0 glass-panel hover-lift rounded-4 overflow-hidden shadow-sm">
+<div class="card h-100 border-0 shadow-sm rounded-4 hover-lift bg-white overflow-hidden">
   
-  <div class="card-img-wrapper">
-    <img [src]="pizza().imagen" [alt]="pizza().nombre">
-    <div class="gradient-overlay"></div>
-    
-    <span class="position-absolute bottom-0 end-0 m-3 badge bg-white text-dark rounded-pill shadow px-3 py-2 d-flex align-items-center gap-1">
-      <span class="fs-6 fw-bold">{{ pizza().precio | currency:'EUR' }}</span>
+  <div class="d-flex justify-content-between align-items-center px-4 pt-4 pb-2">
+    <h5 class="card-title fw-bold text-dark mb-0 text-uppercase ls-1" style="font-size: 1.1rem;">
+      {{ pizza().nombre }}
+    </h5>
+    <span class="badge bg-warning text-dark rounded-pill px-3 py-2 border border-warning-subtle shadow-sm fs-6">
+      {{ pizza().precio | currency:'EUR' }}
     </span>
   </div>
-  
-  <div class="card-body d-flex flex-column p-4">
-    <div class="mb-3">
-      <h4 class="card-title fw-bold text-dark mb-1 ls-tight">{{ pizza().nombre }}</h4>
-      <div style="width: 40px; height: 3px; background-color: var(--bs-primary); border-radius: 2px;"></div>
+
+  <div class="card-img-container px-4 py-2 position-relative text-center">
+    <div class="img-wrapper mx-auto shadow-sm rounded-3 overflow-hidden position-relative">
+      <img [src]="pizza().imagen" class="w-100 h-100 object-fit-cover" [alt]="pizza().nombre">
+      <div class="gradient-overlay"></div>
     </div>
+  </div>
+  
+  <div class="card-body d-flex flex-column px-4 pb-4 pt-2">
     
-    <div class="mb-4 flex-grow-1">
-      <div class="d-flex flex-wrap gap-2">
-        @for (ing of pizza().ingredientes; track $index) {
-          <div class="ingredient-pill rounded-pill px-2 py-1 d-flex align-items-center gap-1 text-secondary user-select-none"
-               [title]="getIcon(ing).label">
-            <i [class]="'bi ' + getIcon(ing).icon + ' ' + getIcon(ing).color"></i>
-            <span class="fw-medium">{{ getIcon(ing).label }}</span>
-          </div>
-        }
-      </div>
+    <div class="mb-3 flex-grow-1 d-flex flex-wrap justify-content-center gap-1">
+      @for (ing of pizza().ingredientes; track $index) {
+        <span class="badge bg-light text-secondary border fw-normal py-1 px-2 d-flex align-items-center gap-1 user-select-none">
+          <i [class]="'bi ' + getConfig(ing).icon + ' ' + getConfig(ing).color"></i>
+          {{ ing }}
+        </span>
+      }
     </div>
 
-    <div class="mt-auto pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <div class="d-flex align-items-center justify-content-between gap-2 mt-auto pt-3 border-top border-light">
       
-      <div class="quantity-selector d-flex align-items-center rounded-pill px-1 py-1">
-        <button class="btn btn-link text-decoration-none p-0 px-2" (click)="dec()">
-          <i class="bi bi-dash-circle-fill fs-5"></i>
+      <div class="d-flex align-items-center bg-light border rounded-pill px-1" style="height: 36px;">
+        <button class="btn btn-sm btn-link text-dark p-0 px-2 text-decoration-none" (click)="dec()">
+          <i class="bi bi-dash"></i>
         </button>
-        <span class="fw-bold mx-2 text-dark" style="min-width: 20px; text-align: center;">{{ cantidad() }}</span>
-        <button class="btn btn-link text-decoration-none p-0 px-2" (click)="inc()">
-          <i class="bi bi-plus-circle-fill fs-5"></i>
+        <span class="fw-bold mx-2 text-dark small" style="min-width: 15px;">{{ cantidad() }}</span>
+        <button class="btn btn-sm btn-link text-primary p-0 px-2 text-decoration-none" (click)="inc()">
+          <i class="bi bi-plus-lg"></i>
         </button>
       </div>
       
-      <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 flex-grow-1 justify-content-center transition-btn" 
-              (click)="submit()">
-        <span>Añadir</span>
+      <button class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2 hover-scale flex-grow-1 justify-content-center" 
+              (click)="submit()" style="height: 36px;">
+        <span class="small text-uppercase">Añadir</span>
         <i class="bi bi-bag-plus-fill"></i>
       </button>
     </div>
-
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { CurrencyPipe, CommonModule } from '@angular/common'; // CommonModule para ngClass
+import { CurrencyPipe, CommonModule } from '@angular/common';
 import { Pizza } from '../../models/pizza.model';
 
 @Component({
@@ -15,21 +15,28 @@ export class PizzaCardComponent {
   
   cantidad = signal(1);
 
-  // DICCIONARIO DE ICONOS (Lógica de presentación pura)
-  ingredientIcons: {[key: string]: {icon: string, color: string, label: string}} = {
-    'tomate': { icon: 'bi-circle-fill', color: 'text-danger', label: 'Salsa de Tomate' },
-    'queso': { icon: 'bi-circle-fill', color: 'text-warning', label: 'Mozzarella' },
-    'carne': { icon: 'bi-hexagon-fill', color: 'text-danger', label: 'Carne Picada' },
-    'cebolla': { icon: 'bi-nut-fill', color: 'text-secondary', label: 'Cebolla' },
-    'pescado': { icon: 'bi-water', color: 'text-info', label: 'Anchoas' },
-    'ajo': { icon: 'bi-gem', color: 'text-white bg-dark rounded-circle', label: 'Ajo' },
-    'setas': { icon: 'bi-umbrella-fill', color: 'text-secondary', label: 'Champiñones' },
-    'pimiento': { icon: 'bi-triangle-fill', color: 'text-success', label: 'Pimiento' },
-    'piña': { icon: 'bi-sun-fill', color: 'text-warning', label: 'Piña' },
-    'jamon': { icon: 'bi-square-fill', color: 'text-danger opacity-75', label: 'Jamón York' },
-    'huevo': { icon: 'bi-egg-fill', color: 'text-warning', label: 'Huevo' },
-    'bacon': { icon: 'bi-hdd-stack-fill', color: 'text-danger', label: 'Bacon' },
-    'albahaca': { icon: 'bi-flower1', color: 'text-success', label: 'Albahaca Fresca' }
+  // DICCIONARIO DE ICONOS (Formas y Colores Bootstrap)
+  ingredientConfig: {[key: string]: {icon: string, color: string}} = {
+    // Rojos
+    'tomate': { icon: 'bi-circle-fill', color: 'text-danger' },
+    'carne': { icon: 'bi-hexagon-fill', color: 'text-danger' },
+    'jamon': { icon: 'bi-square-fill', color: 'text-danger opacity-75' },
+    'bacon': { icon: 'bi-hdd-stack-fill', color: 'text-danger' },
+    
+    // Amarillos/Naranjas
+    'queso': { icon: 'bi-circle-fill', color: 'text-warning' },
+    'piña': { icon: 'bi-sun-fill', color: 'text-warning' },
+    'huevo': { icon: 'bi-egg-fill', color: 'text-warning' },
+    
+    // Verdes/Vegetales
+    'albahaca': { icon: 'bi-flower1', color: 'text-success' },
+    'pimiento': { icon: 'bi-triangle-fill', color: 'text-success' },
+    
+    // Neutros/Otros
+    'cebolla': { icon: 'bi-nut-fill', color: 'text-secondary' },
+    'setas': { icon: 'bi-umbrella-fill', color: 'text-secondary' },
+    'ajo': { icon: 'bi-gem', color: 'text-dark' },
+    'pescado': { icon: 'bi-water', color: 'text-info' }
   };
 
   inc() { this.cantidad.update(v => v + 1); }
@@ -40,8 +47,8 @@ export class PizzaCardComponent {
     this.cantidad.set(1);
   }
 
-  // Helper para obtener datos del icono de forma segura
-  getIcon(ingrediente: string) {
-    return this.ingredientIcons[ingrediente] || { icon: 'bi-circle', color: 'text-secondary', label: ingrediente };
+  // Helper para obtener la config, con fallback por si falta alguno
+  getConfig(ingrediente: string) {
+    return this.ingredientConfig[ingrediente] || { icon: 'bi-circle', color: 'text-muted' };
   }
 }

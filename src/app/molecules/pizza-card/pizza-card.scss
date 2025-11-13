@@ -1,60 +1,54 @@
-// Efecto Zoom en la imagen
-.card-img-wrapper {
-  overflow: hidden; // Para que la imagen no se salga al hacer zoom
-  height: 220px;
-  position: relative;
-
+// Contenedor de la imagen (Rectángulo fijo)
+.img-wrapper {
+  width: 100%;
+  max-width: 240px; // Ancho máximo para que respire a los lados
+  height: 160px;    // Altura fija para alineación perfecta
+  
+  // Transición suave para el zoom
   img {
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 }
 
-// Al hacer hover sobre la tarjeta entera (.card), la imagen crece
-.card:hover .card-img-wrapper img {
+// Efecto Zoom al pasar el ratón
+.card:hover .img-wrapper img {
   transform: scale(1.1);
 }
 
-// Degradado para que el precio resalte mejor
+// Sombra interna sutil en la parte inferior de la imagen
 .gradient-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60%;
-  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  height: 30%;
+  background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
   pointer-events: none;
 }
 
-// Etiquetas de ingredientes (Pills)
-.ingredient-pill {
-  font-size: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: #fff;
-    border-color: var(--bs-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  }
-
-  i { font-size: 0.9rem; }
+// Espaciado de letras
+.ls-1 {
+  letter-spacing: 1px;
 }
 
-// Selector de cantidad personalizado
-.quantity-selector {
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  
-  .btn-link {
-    color: var(--bs-secondary);
-    transition: color 0.2s;
-    
-    &:hover { color: var(--bs-primary); }
-    &:active { transform: scale(0.9); }
+// Efecto pulsación en botón
+.hover-scale:active {
+  transform: scale(0.95);
+}
+
+// Elevación de la tarjeta completa
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
   }
+}
+
+// Asegurar que el badge de precio quede bonito sobre la imagen
+.card-img-container .badge {
+  backdrop-filter: blur(2px);
+  // Ajuste fino de posición para que no tape la imagen demasiado
+  top: 1rem !important;
+  right: 15% !important; 
 }
