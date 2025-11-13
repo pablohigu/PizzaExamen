@@ -14,13 +14,5 @@ import { CheckoutFormComponent } from '../organisms/checkout-form/checkout-form'
   styleUrl: './home-page.scss'
 })
 export class HomePageComponent {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
-
-  // ESTA ES LA FUNCIÓN QUE TE FALTABA O TENÍA OTRO NOMBRE
-  handleReset() {
-    const element = this.document.getElementById('catalogo-pizzas');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+ 
 }

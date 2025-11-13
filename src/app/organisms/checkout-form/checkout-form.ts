@@ -87,7 +87,6 @@ export class CheckoutFormComponent {
     this.service.clearCart();
     this.form.reset({ metodo: 'tarjeta' });
     this.toggleInputs('tarjeta'); // Resetear lógica inputs
-    this.resetRequest.emit(); 
   }
 
   get isTarjeta() { return this.form.get('metodo')?.value === 'tarjeta'; }
