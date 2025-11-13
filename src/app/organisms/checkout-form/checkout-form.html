@@ -1,85 +1,117 @@
-<div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden">
-  <div class="card-body p-4">
-    <form [formGroup]="form" (ngSubmit)="pagar()">
-      
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="hora" formControlName="hora" placeholder="HH:MM"
-                   [class.is-invalid]="form.get('hora')?.invalid && form.get('hora')?.touched">
-            <label for="hora">Hora</label>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="dir" formControlName="direccion" placeholder="Dir"
-                   [class.is-invalid]="form.get('direccion')?.invalid && form.get('direccion')?.touched">
-            <label for="dir">Dirección</label>
-          </div>
-        </div>
-      </div>
-
-      <hr class="my-4 opacity-10">
-
-      <h6 class="fw-bold text-primary mb-3">Selecciona método de pago</h6>
-
-      <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3 border transition-bg"
-           [class.bg-primary-subtle]="form.get('metodo')?.value === 'tarjeta'"
-           [class.border-primary]="form.get('metodo')?.value === 'tarjeta'">
-        
-        <div class="form-check">
-          <input class="form-check-input fs-5" type="radio" name="metodo" id="optCard" value="tarjeta" formControlName="metodo">
-        </div>
-
-        <i class="bi bi-credit-card-2-front fs-2 text-primary"></i>
-
-        <div class="flex-grow-1">
-          <label class="form-label small fw-bold mb-1" for="optCard">Tarjeta de Crédito</label>
-          <input type="text" class="form-control" formControlName="tarjeta" placeholder="XXXX XXXX XXXX XXXX"
-                 [class.is-invalid]="form.get('tarjeta')?.invalid && form.get('tarjeta')?.touched">
-          
-          @if(form.get('tarjeta')?.invalid && form.get('tarjeta')?.touched) {
-            <div class="invalid-feedback small">Introduce 16 dígitos.</div>
-          }
-        </div>
-      </div>
-
-      <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3 border transition-bg"
-           [class.bg-primary-subtle]="form.get('metodo')?.value === 'bizum'"
-           [class.border-primary]="form.get('metodo')?.value === 'bizum'">
-        
-        <div class="form-check">
-          <input class="form-check-input fs-5" type="radio" name="metodo" id="optBizum" value="bizum" formControlName="metodo">
-        </div>
-
-        <i class="bi bi-phone fs-2 text-primary"></i>
-
-        <div class="flex-grow-1">
-          <label class="form-label small fw-bold mb-1" for="optBizum">Bizum Móvil</label>
-          <input type="text" class="form-control" formControlName="telefono" placeholder="600 000 000"
-                 [class.is-invalid]="form.get('telefono')?.invalid && form.get('telefono')?.touched">
-          
-          @if(form.get('telefono')?.invalid && form.get('telefono')?.touched) {
-            <div class="invalid-feedback small">Introduce 9 dígitos.</div>
-          }
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">
-        FINALIZAR PEDIDO
-      </button>
-
-    </form>
+<div class="card border-0 shadow-lg rounded-4 p-4 bg-white">
+  <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+    <i class="bi bi-credit-card-2-front text-primary fs-3 me-3"></i>
+    <h4 class="fw-bold text-dark mb-0">Finalizar Pedido</h4>
   </div>
+  
+  <form [formGroup]="form" (ngSubmit)="pagar()">
+    
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input type="text" class="form-control bg-light border-0" id="hora" formControlName="hora" placeholder="20:30"
+                 [class.is-invalid]="form.get('hora')?.touched && form.get('hora')?.invalid">
+          <label for="hora">Hora (HH:MM)</label>
+          @if (form.get('hora')?.invalid && form.get('hora')?.touched) {
+            <div class="invalid-feedback">Formato incorrecto</div>
+          }
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="form-floating">
+          <input type="text" class="form-control bg-light border-0" id="dir" formControlName="direccion" placeholder="Dir"
+                 [class.is-invalid]="form.get('direccion')?.touched && form.get('direccion')?.invalid">
+          <label for="dir">Dirección completa</label>
+          @if (form.get('direccion')?.hasError('required') && form.get('direccion')?.touched) {
+            <div class="invalid-feedback">Dirección obligatoria</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <h6 class="fw-bold text-primary mb-3 small text-uppercase ls-1">Selecciona Método</h6>
+
+    <div class="row g-3 mb-4"> <div class="col-md-6">
+        <div class="p-3 rounded-3 border h-100 transition-all" 
+             [class.border-primary]="isTarjeta" 
+             [class.bg-primary-subtle]="isTarjeta"
+             [class.opacity-75]="!isTarjeta">
+          
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="radio" name="metodo" id="rt" value="tarjeta" formControlName="metodo">
+            <label class="form-check-label fw-bold d-flex align-items-center gap-2 w-100 cursor-pointer" for="rt">
+              <i class="bi bi-credit-card"></i> Tarjeta
+            </label>
+          </div>
+
+          <div class="ms-4">
+            <input type="text" class="form-control form-control-sm" formControlName="tarjeta" placeholder="16 dígitos" maxlength="16"
+                   [class.is-invalid]="form.get('tarjeta')?.touched && form.get('tarjeta')?.invalid">
+            @if (form.get('tarjeta')?.touched && form.get('tarjeta')?.invalid) {
+              <div class="invalid-feedback small">Requerido: 16 dígitos.</div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-3 rounded-3 border h-100 transition-all"
+             [class.border-primary]="isBizum" 
+             [class.bg-primary-subtle]="isBizum"
+             [class.opacity-75]="!isBizum">
+          
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="radio" name="metodo" id="rb" value="bizum" formControlName="metodo">
+            <label class="form-check-label fw-bold d-flex align-items-center gap-2 w-100 cursor-pointer" for="rb">
+              <i class="bi bi-phone"></i> Bizum
+            </label>
+          </div>
+
+          <div class="ms-4">
+            <input type="text" class="form-control form-control-sm" formControlName="telefono" placeholder="9 dígitos" maxlength="9"
+                   [class.is-invalid]="form.get('telefono')?.touched && form.get('telefono')?.invalid">
+            @if (form.get('telefono')?.touched && form.get('telefono')?.invalid) {
+              <div class="invalid-feedback small">Requerido: 9 dígitos.</div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (service.totalPrice() === 0) {
+      <div class="alert alert-warning d-flex align-items-center p-3 rounded-3 mb-4 border-warning-subtle shadow-sm" role="alert">
+        <i class="bi bi-cart-x-fill fs-4 me-3 text-warning-emphasis"></i>
+        <div>
+          <strong class="d-block text-warning-emphasis">Tu carrito está vacío</strong>
+          <small class="text-muted">Añade al menos una pizza para poder realizar el pedido.</small>
+        </div>
+      </div>
+    }
+
+    <div class="d-grid gap-2 d-md-flex">
+      <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm flex-grow-1"
+              [disabled]="form.invalid || service.totalPrice() === 0">
+        PAGAR {{ service.totalPrice() | currency:'EUR' }}
+      </button>
+      
+      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="limpiar()">
+        Limpiar
+      </button>
+    </div>
+
+  </form>
 </div>
 
 @if (showModal) {
   <div class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center" style="z-index: 2000;">
-    <div class="card p-5 text-center rounded-5 shadow-lg animate-pop">
-      <i class="bi bi-check-circle-fill text-success display-1 mb-3"></i>
-      <h2>¡Pedido Confirmado!</h2>
-      <p class="lead mb-4">Tu pizza está en el horno.</p>
-      <button class="btn btn-success btn-lg rounded-pill px-5" (click)="confirmar()">Genial</button>
+    <div class="card p-5 text-center rounded-5 shadow-lg animate-pop bg-white border-0" style="max-width: 400px;">
+      <div class="mb-3 text-success display-1"><i class="bi bi-check-circle-fill"></i></div>
+      <h2 class="fw-bold text-dark mb-3">¡Pedido Recibido!</h2>
+      <p class="text-muted mb-4">
+        Tu pizza llegará a las <strong>{{ form.get('hora')?.value }}</strong> a<br>
+        <em>{{ form.get('direccion')?.value }}</em>
+      </p>
+      <button class="btn btn-success w-100 rounded-pill py-3 fw-bold shadow-sm" (click)="confirmarPedido()">ENTENDIDO</button>
     </div>
   </div>
 }

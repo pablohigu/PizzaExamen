@@ -1,36 +1,34 @@
 <app-header 
   [titulo]="'4V PIZZA'" 
-  [subtitle]="'Pasión por la masa'"
+  [subtitle]="'Pizzería Artesanal'"
   [pizzaLogoUrl]="'assets/pizzaLOGO.png'"
-  [cuatroVientosLogoUrl]="'assets/logocuatrovientos.png'" 
-  [lunchOpenHour]="13"
-  [dinnerOpenHour]="20">
-</app-header> <main class="container py-5 min-vh-100">
+  [cuatroVientosLogoUrl]="'assets/cuatrovientosLOGO.png'"
+  [lunchOpenHour]="12"
+  [dinnerOpenHour]="19">
+</app-header>
+<main class="container py-5 min-vh-100">
   
   <section class="mb-5">
     <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
-      <h2 class="fw-light m-0 text-dark display-6">Nuestras Pizzas</h2>
-      <span class="badge bg-primary ms-3 rounded-pill">Receta Original</span>
+      <h2 class="fw-light m-0 text-primary">Nuestras Pizzas</h2>
+      <span class="badge bg-light text-dark ms-3 border">Hechas a mano</span>
     </div>
     <app-pizza-list></app-pizza-list>
   </section>
 
-  <section id="zona-pedido" class="row g-5">
-    
-    <div class="col-lg-5">
-      <div class="sticky-lg-top" style="top: 2rem;">
-        <h4 class="text-secondary fw-bold mb-3">1. Revisa tu pedido</h4>
+  <section class="row justify-content-center">
+    <div class="col-12 col-lg-10"> 
+      
+      <div class="mb-4">
         <app-cart-summary></app-cart-summary>
       </div>
-    </div>
 
-    <div class="col-lg-7">
-      <h4 class="text-secondary fw-bold mb-3">2. Datos de envío</h4>
-      <app-checkout-form (resetRequest)="handleReset()"></app-checkout-form>
-    </div>
+      <div>
+        <app-checkout-form (resetRequest)="handleReset()"></app-checkout-form>
+      </div>
 
+    </div>
   </section>
 
 </main>
-
-<app-footer [author]="'Pablo Higuero'"></app-footer>
+<app-footer [author]="'Pablo Higuero'" [course]="'2º DAM'"></app-footer>

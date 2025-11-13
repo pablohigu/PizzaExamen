@@ -1,42 +1,29 @@
-// Tarjetas de pago personalizadas
-.payment-card {
-  border: 2px solid transparent !important;
-  background-color: #f8f9fa;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-    background-color: #fff;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
-  }
-}
-// Estilo cuando está seleccionado (gracias al input:checked + label)
-.btn-check:checked + .payment-card {
-  border-color: var(--bs-primary) !important;
-  background-color: #fff5f0; // Fondo naranja muy suave
-  color: var(--bs-primary) !important;
+.transition-all {
+  transition: all 0.3s ease;
 }
 
-// Animación suave de entrada
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+.cursor-pointer {
+  cursor: pointer;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-// Animación de entrada para el modal
+// Animación de entrada para el modal (Pop-in)
 @keyframes popIn {
-  0% { opacity: 0; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-.animate-pop-in {
-  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Efecto rebote suave
+.animate-pop {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Efecto rebote
 }
 
-// Asegura que el modal esté siempre encima de todo
-.position-fixed {
-  z-index: 10 !important;
+// Botón principal con elevación
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(var(--bs-primary-rgb), 0.2) !important;
+}
+
+// Hover suave para el botón del modal
+.hover-scale:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
 }
